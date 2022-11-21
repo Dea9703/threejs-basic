@@ -4,8 +4,9 @@
       ref="loginFormRef"
       :model="loginForm"
       :rules="rules"
-      label-width="120px"
+      label-width="90px"
     >
+      <h1 class="title">three-basic</h1>
       <el-form-item label="Mobile" prop="mobile">
         <el-input v-model="loginForm.mobile" />
       </el-form-item>
@@ -13,7 +14,7 @@
         <el-input v-model="loginForm.password" type="password" autocomplete="off" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="fetchLogin(loginFormRef)">登录</el-button>
+        <el-button type="primary" style="width:100%;" @click="fetchLogin(loginFormRef)">登录</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -23,9 +24,10 @@
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import type { FormInstance } from 'element-plus'
-import { login } from '@/api/user'
+import { useUserStore } from '@/stores/user'
 
 const router = useRouter()
+const userStore = useUserStore()
 
 const loginFormRef = ref<FormInstance>()
 const checkMobile = (_: any, value: string, callback:Function) => {
@@ -59,10 +61,9 @@ const fetchLogin = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate(async valid => {
     if (valid) {
-      await login(loginForm)
-      router.push('/')
+      await userStore.fetchLogin(loginForm)
+      router.replace('/')
     } else {
-      console.log('error login')
       return false
     }
   })
@@ -81,10 +82,17 @@ const fetchLogin = async (formEl: FormInstance | undefined) => {
 .el-form {
     width: 520px;
     box-sizing: border-box;
-    padding: 60px 20px;
+    padding: 30px 20px;
+    border-radius: 10px;
     position: absolute;
     right: 2%;
     top: 50%;
     transform: translateY(-50%);
+    background-color: rgba($color: #31a293, $alpha: .3);
+    .title {
+        color: #606266;
+        text-align: center;
+        margin: 20px 0;
+    }
 }
 </style>
