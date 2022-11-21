@@ -62,7 +62,7 @@ const fetchLogin = async (formEl: FormInstance | undefined) => {
   await formEl.validate(async valid => {
     if (valid) {
       await userStore.fetchLogin(loginForm)
-      router.replace('/')
+      router.replace({ path: '/' })
     } else {
       return false
     }
